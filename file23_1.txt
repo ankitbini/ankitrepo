@@ -46,6 +46,8 @@ public class MDS_Test_Verify_Add_User extends IAMTestBase {
 		
 		validateMDSAddUser(requestUser);
 		logoutIIQ();
+    
+    yahuuuuuu
 	}
 	
 	@AfterTest(groups = {"createUserTest"})
