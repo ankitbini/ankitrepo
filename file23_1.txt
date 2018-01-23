@@ -1,0 +1,57 @@
+package com.autodesk.testautomation.eio.iam.testsuite;
+
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import com.autodesk.testautomation.core.utils.Util;
+import com.autodesk.testautomation.eio.iam.IAMTestBase;
+import com.autodesk.testautomation.eio.iam.testdata.IAMConstants;
+
+public class MDS_Test_Verify_Add_User extends IAMTestBase {
+	
+	public MDS_Test_Verify_Add_User()
+	{
+		super(System.getProperty("browser"));
+	}
+	
+	@BeforeTest(groups = {"createUserTest"})
+	public void navigateToServiceSite()
+	{
+		launch(IAMConstants.serviceurl);
+		createAppPages();
+	}
+	
+	@Test(groups = {"createUserTest"})
+	public void Test_MDS_Add_User()
+	{
+		String requestUser = getString(System.getProperty("requestedUser"));
+		Util.PrintInfo("Requested user is "+requestUser);
+		
+		impersonateUser(requestUser);
+		switch_To_Left_Tab_Frame();
+		click_To_Support_Forms();
+		switch_To_Main_Frame();
+		selectMDSAccessRequest();
+		selectMDSRequestType(testProperties.getConstant("RequestType"));
+		selectMDSModelName(testProperties.getConstant("ModelName"));
+		selectMDSPermission(testProperties.getConstant("MDSPermission"));
+		selectMDSEnvironment(testProperties.getConstant("Environment"));
+		selectMDSRole(testProperties.getConstant("MDSRole"),testProperties.getConstant("RoleLink"));
+		orderNow();
+		approveRequest();
+		Util.printInfo("Check status on Requested account");
+		checkRequestStatus(testProperties.getConstant("RequestedUser"));
+		logoutServiceNow();
+		
+		validateMDSAddUser(requestUser);
+		logoutIIQ();
+	}
+	
+	@AfterTest(groups = {"createUserTest"})
+	public void configAfterTest()
+	{
+		//driver.close();
+	}
+
+}
